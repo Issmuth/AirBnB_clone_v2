@@ -143,3 +143,4 @@ Usage: <class_name>.update(<_id>, <dictionary>)
 <center> <h2>Side-Note</h2> </center>
 The exact user_id may be different from the ones provided, `BE GUIDED`.
 <br>
+Initial
