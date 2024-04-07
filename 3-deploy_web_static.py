@@ -1,10 +1,23 @@
 #!/usr/bin/python3
 """Full deployment, archiving and moving."""
 from fabric.api import local, run, env, sudo, put
+from datetime import datetime
 import os
-env.hosts = ['100.25.2.66', '54.159.26.115']
+
+env.hosts = ["100.25.2.66", "54.159.26.115"]
 env.user = 'ubuntu'
 env.key_filename = '~/0-RSA_private_key'
+
+def do_pack():
+    """Packing function."""
+
+    local("mkdir -p versions")
+    name = "versions/web_static_" + datetime.now().strftime("%Y%m%d%H%M%S")
+    result = local("tar -czvf {}.tgz web_static".format(name))
+    if result.failed is True:
+        return None
+    else:
+        return ("{}.tgz".format(name))
 
 
 def do_deploy(archive_path):
@@ -45,23 +58,15 @@ def do_deploy(archive_path):
     return True
 
 
-def do_pack():
-    """Packing function."""
-
-    local("mkdir -p versions")
-    name = "versions/web_static_" + datetime.now().strftime("%Y%m%d%H%M%S")
-    result = local("tar -czvf {}.tgz web_static".format(name))
-    if result.failed:
-        return None
-    else:
-        return ("versions/{}.tgz".format(name))
-
-
 def deploy():
     """Combination of pack and deploy."""
     path = do_pack()
+    print(path)
     if path is None:
         return False
 
     ret = do_deploy(path)
     return (ret)
+
+if __name__ == "__main__":
+    deploy()
