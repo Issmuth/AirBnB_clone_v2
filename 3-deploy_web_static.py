@@ -55,6 +55,10 @@ def do_deploy(archive_path):
     if run('ln -sf /data/web_static/releases/{} /data/web_static/current'
             .format(file)).failed is True:
         return False
+
+    if sudo('service nginx restart').failed is True:
+        return False
+
     return True
 
 
