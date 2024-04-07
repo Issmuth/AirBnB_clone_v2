@@ -67,6 +67,3 @@ def deploy():
 
     ret = do_deploy(path)
     return (ret)
-
-if __name__ == "__main__":
-    deploy()
