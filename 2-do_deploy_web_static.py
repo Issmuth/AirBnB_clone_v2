@@ -22,11 +22,21 @@ def do_deploy(archive_path):
            .format(file)).failed is True:
         return False
 
-    if run('tar -xvf /tmp/{} -C /data/web_static/releases/{}'
+    if run('tar -xzf /tmp/{} -C /data/web_static/releases/{}'
             .format(filename, file)).failed is True:
         return False
 
+    if run('mv /data/web_static/releases/{}/web_static/* '
+           '/data/web_static/releases/{}/'.format(file, file)).failed is True:
+        return False
+
+    if run('rm -rf /data/web_static/releases/web_static').failed is True:
+        return False
+
     if run('rm /tmp/{}'.format(filename)).failed is True:
+        return False
+
+    if run('rm /data/web_static/current').failed is True:
         return False
 
     if run('ln -sf /data/web_static/releases/{} /data/web_static/current'
