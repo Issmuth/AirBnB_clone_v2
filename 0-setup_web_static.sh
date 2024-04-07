@@ -19,6 +19,6 @@ chgrp -R ubuntu /data/
 
 line="server {\n\tlisten 80 default_server;\n\tlisten [::]:80 default_server;\n\tadd_header X-Served-By $HOSTNAME;\n\troot   /var/www/html;\n\tindex  index.html index.htm;\n\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current;\n\t\tindex index.html index.htm;\n\t}\n\n\tlocation /redirect_me {\n\t\treturn 301 https://www.youtube.com/watch?v=xvFZjo5PgG0&pp=ygUJcmljayByb2xs;\n\t}\n\n\terror_page 404 /404.html;\n\tlocation /404 {\n\t\troot /var/www/html;\n\t\tinternal;\n\t}\n}"
 
-echo -e "${line}" > /etc/nginx/sites-available/default
+echo -e "$line" > /etc/nginx/sites-available/default
 
 service nginx restart
