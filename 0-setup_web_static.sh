@@ -9,24 +9,16 @@ apt-get -y install nginx
 mkdir -p /data/web_static/releases/test/
 mkdir -p /data/web_static/shared/
 
-# store test html file content in a variable
-index='<!DOCTYPE html>\n<html lang="en">\n<head>\n\t<meta charset="UTF-8" />\n\t<title>Hello, world!</title>\n\t<meta name="viewport" content="width=device-width,initial-scale=1" />\n\t<meta name="description" content="" />\n\t<link rel="icon" href="favicon.png">\n</head>\n<body>\n\t<h1>Hello, world!</h1>\n</body>\n</html>'
+#create dummy page
+echo 'Web Static Deployment' > /data/web_static/releases/test/index.html
 
-# save the content to a file named index.html
-echo -e ${index} > /data/web_static/releases/test/index.html
+ln -sf /data/web_static/releases/test/ /data/web_static/current
 
-# create a symbolic link to the test directory
-ln -sf /data/web_static/current /data/web_static/releases/test/
-
-# change ownership of /data directory to user ubuntu
 chown -R ubuntu /data/
 chgrp -R ubuntu /data/
 
-new_config="\t}\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;"
+line='server {\n\tlisten 80 default_server;\n\tlisten [::]:80 default_server;\n\tadd_header X-Served-By $HOSTNAME;\n\troot   /var/www/html;\n\tindex  index.html index.htm;\n\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current;\n\t\tindex index.html index.htm;\n\t}\n\n\tlocation /redirect_me {\n\t\treturn 301 http://cuberule.com/;\n\t}\n\n\terror_page 404 /404.html;\n\tlocation /404 {\n\t\troot /var/www/html;\n\t\tinternal;\n\t}\n}'
 
-sed -i "s/include \/etc\/nginx\/sites-enabled\/\*;/include \/etc\/nginx\/sites-enabled\/\*;\n\tadd_header X-Served-By \"$HOSTNAME\";/" /etc/nginx/nginx.conf
+echo -e $line > /etc/nginx/sites-available/default
 
-# configures nginx 
-sed -i "\/^\\t\\ttry_files \$uri \$uri\/ \404\;/r $new_config"
-
-service nginx start
+service nginx restart
