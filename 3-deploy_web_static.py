@@ -58,7 +58,7 @@ def do_deploy(archive_path):
 
     if sudo('service nginx restart').failed is True:
         return False
-
+    print("New version deployed!")
     return True
 
 
