@@ -8,6 +8,7 @@ env.hosts = ["100.25.2.66", "54.159.26.115"]
 env.user = 'ubuntu'
 env.key_filename = '~/0-RSA_private_key'
 
+
 def do_pack():
     """Packing function."""
 
