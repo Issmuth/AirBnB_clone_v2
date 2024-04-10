@@ -4,7 +4,7 @@ from fabric.api import local, run, env, sudo, put
 from datetime import datetime
 import os
 
-env.hosts = ["100.25.2.66", "54.159.26.115"]
+env.hosts = ["100.25.2.66", "3.86.7.177"]
 env.user = 'ubuntu'
 env.key_filename = '~/0-RSA_private_key'
 
@@ -44,7 +44,8 @@ def do_deploy(archive_path):
            '/data/web_static/releases/{}/'.format(file, file)).failed is True:
         return False
 
-    if run('rm -rf /data/web_static/releases/{}/web_static'.format(file)).failed is True:
+    if run('rm -rf /data/web_static/releases/{}/web_static'
+            .format(file)).failed is True:
         return False
 
     if run('rm /tmp/{}'.format(filename)).failed is True:
@@ -55,6 +56,10 @@ def do_deploy(archive_path):
 
     if run('ln -sf /data/web_static/releases/{} /data/web_static/current'
             .format(file)).failed is True:
+        return False
+
+    if run('echo > "test content" > /data/web_static/current'
+           '/my_index.html').failed is True:
         return False
 
     if sudo('service nginx restart').failed is True:
