@@ -23,6 +23,7 @@ def cisfun(text):
     return ('C {}'.format(escape(text.replace('_', ' '))))
 
 
+@app.route('/python/', strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
 def pythoniscool(text='is cool'):
     return ('Python {}'.format(escape(text.replace('_', ' '))))
