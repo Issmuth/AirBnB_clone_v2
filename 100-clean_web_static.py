@@ -1,23 +1,39 @@
 #!/usr/bin/python3
 """Cleaner."""
-from fabric.api import local, run
+from fabric.api import local, run, env, lcd, cd
 import os
 
+env.hosts = ['100.25.2.66', '3.86.7.177']
+env.user = ['ubuntu']
+env.key_filename = '~/0-RSA_private_key'
 
 def do_clean(number=0):
     """clean old archive."""
-    if int(number) == 0:
-        number = 1
+    if int(number) == 1 or int(number) == 0:
+        num = 1
     else:
-        number = int(number)
+        num = int(number)
 
-    archs = sorted(os.listdir('versions'))
+    webs = sorted(os.listdir("versions"))
+    web = []
+    for i in range(num):
+        a = webs.pop()
 
-    archs.pop() for i in range(number)
-    local("rm versions/{}".format(a)) for a in archs
+    for w in webs:
+        if "web_static_" in w:
+            web.append(w)
 
-    with cd("/data/web_static/releases"):
-    archs = run("ls -tr").split()
-    archs = a for a in archives if "web_static_" in a
-    archs.pop() for i in range(number)
-    [run("rm -rf ./{}".format(a)) for a in archs]
+    for w in web:
+        local("rm versions/{}".format(w))
+"""
+    web_dirs = run("ls -tr /data/web_static/releases").split()
+    dirs = []
+    for a in web_dirs:
+        if "web_static_" in a:
+            dirs.append(a)
+
+    for i in range(num):
+        dirs.pop()
+
+    for a in dirs:
+        run("rm -rf ./{}".format(a))"""
