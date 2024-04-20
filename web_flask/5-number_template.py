@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """More routing and Flask intro."""
-from flask import Flask
+from flask import Flask, render_template
 from markupsafe import escape
 app = Flask(__name__)
 
@@ -36,7 +36,7 @@ def number(n):
 
 @app.route('/number_template/<int:n>', strict_slashes=False)
 def number_template(n):
-    return ('<body><h1>Number: {}</h1></body>'.format(n))
+    return (render_template('/5-number.html', n=n))
 
 
 if __name__ == "__main__":
