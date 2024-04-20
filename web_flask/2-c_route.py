@@ -19,6 +19,7 @@ def hbnb():
 
 @app.route('/c/<text>', strict_slashes=False)
 def hbnb(text):
+    """Returns C followed by a the string."""
     return ('C {}'.format(escape(text.replace('_', ' '))))
 
 
