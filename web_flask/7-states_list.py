@@ -4,15 +4,14 @@ import sys
 sys.path.append("..")
 from flask import Flask, render_template
 from models import storage
-from models import State
+states = storage.all("State")
 app = Flask(__name__)
 
 
 @app.route('/states_list', strict_slashes=False)
 def listStates():
     """Lists the states."""
-    states = storage.all("State")
-    render_template('7-states_list.html', states=states)
+    return (render_template('7-states_list.html', states=states))
 
 
 @app.teardown_appcontext
