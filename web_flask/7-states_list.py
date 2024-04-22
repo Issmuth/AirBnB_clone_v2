@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 """Flask Integration."""
+import sys
+sys.path.append("..")
 from flask import Flask, render_template
 from models import storage
 from models import State
